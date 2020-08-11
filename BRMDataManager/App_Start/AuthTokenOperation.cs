@@ -33,7 +33,8 @@ namespace BRMDataManager.App_Start
                             type = "string",
                             name = "grant_type",
                             required = true,
-                            @in = "formData"
+                            @in = "formData",
+                            @default = "password"
                         },
                         new Parameter
                         {
