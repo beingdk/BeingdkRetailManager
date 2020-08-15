@@ -1,4 +1,5 @@
-﻿using BRMDesktopUI.ViewModels;
+﻿using BRMDesktopUI.Helpers;
+using BRMDesktopUI.ViewModels;
 using Caliburn.Micro;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace BRMDesktopUI
 {
@@ -31,6 +33,11 @@ namespace BRMDesktopUI
 				.ToList()
 				.ForEach(viewModelType => _container.RegisterPerRequest(
 					viewModelType, viewModelType.ToString(), viewModelType));
+
+			ConventionManager.AddElementConvention<PasswordBox>(
+			PasswordBoxHelper.BoundPasswordProperty,
+			"Password",
+			"PasswordChanged");
 		}
 		protected override void OnStartup(object sender, StartupEventArgs e)
 		{
