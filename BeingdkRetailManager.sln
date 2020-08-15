@@ -9,6 +9,8 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "BRMData", "BRMData\BRMData.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BRMDesktopUI", "BRMDesktopUI\BRMDesktopUI.csproj", "{6EFABEFF-7F89-490F-824C-532D42FCB245}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BRMDataManager.Library", "BRMDataManager.Library\BRMDataManager.Library.csproj", "{CDC83590-7764-4F59-861E-2BEBAA036B0F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{6EFABEFF-7F89-490F-824C-532D42FCB245}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6EFABEFF-7F89-490F-824C-532D42FCB245}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6EFABEFF-7F89-490F-824C-532D42FCB245}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDC83590-7764-4F59-861E-2BEBAA036B0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDC83590-7764-4F59-861E-2BEBAA036B0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDC83590-7764-4F59-861E-2BEBAA036B0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDC83590-7764-4F59-861E-2BEBAA036B0F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
