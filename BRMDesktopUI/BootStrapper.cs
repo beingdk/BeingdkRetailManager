@@ -1,4 +1,6 @@
 ﻿using BRMDesktopUI.Helpers;
+using BRMDesktopUI.Library.Api;
+using BRMDesktopUI.Library.Models;
 using BRMDesktopUI.ViewModels;
 using Caliburn.Micro;
 using System;
@@ -26,6 +28,7 @@ namespace BRMDesktopUI
 			_container
 				.Singleton<IWindowManager, WindowManager>()
 				.Singleton<IEventAggregator, EventAggregator>()
+				.Singleton<ILoggedInUserModel, LoggedInUserModel>()
 				.Singleton<IApiHelper, ApiHelper>();
 
 			GetType().Assembly.GetTypes()

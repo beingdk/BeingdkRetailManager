@@ -1,4 +1,5 @@
-﻿using BRMDesktopUI.Models;
+﻿using BRMDesktopUI.Library.Models;
+using BRMDesktopUI.Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -8,15 +9,17 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BRMDesktopUI.Helpers
+namespace BRMDesktopUI.Library.Api
 {
 	public class ApiHelper : IApiHelper
 	{
 		private HttpClient apiClient;
+		public ILoggedInUserModel _loggedInUser;
 
-		public ApiHelper()
+		public ApiHelper(ILoggedInUserModel loggedInUser)
 		{
 			InitializeClient();
+			_loggedInUser = loggedInUser;
 		}
 
 		private void InitializeClient()
@@ -43,6 +46,31 @@ namespace BRMDesktopUI.Helpers
 				{
 					var results = await response.Content.ReadAsAsync<AuthenticatedUser>();
 					return results;
+				}
+				else
+				{
+					throw new Exception(response.ReasonPhrase);
+				}
+			}
+		}
+
+		public async Task GetLoggedInUserInfo(string token)
+		{
+			apiClient.DefaultRequestHeaders.Accept.Clear();
+			apiClient.DefaultRequestHeaders.Clear();
+			apiClient.DefaultRequestHeaders.Add("Authorization",$"Bearer {token}");
+
+			using (HttpResponseMessage response = await apiClient.GetAsync("/api/User"))
+			{
+				if (response.IsSuccessStatusCode)
+				{
+					var results = await response.Content.ReadAsAsync<LoggedInUserModel>();
+					_loggedInUser.CreatedDate = results.CreatedDate;
+					_loggedInUser.EmailAddress = results.EmailAddress;
+					_loggedInUser.FirstName = results.FirstName;
+					_loggedInUser.LastName = results.LastName;
+					_loggedInUser.Id = results.Id;
+					_loggedInUser.Token = token;
 				}
 				else
 				{

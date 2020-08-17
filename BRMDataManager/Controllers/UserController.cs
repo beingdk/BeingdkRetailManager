@@ -13,12 +13,12 @@ namespace BRMDataManager.Controllers
     public class UserController : ApiController
     {
         // GET: User/GetById
-        public List<UserModel> GetById()
+        public UserModel GetById()
         {
             UserData data = new UserData();
 
             string userId = RequestContext.Principal.Identity.GetUserId();
-            return data.GetUserById(userId);
+            return data.GetUserById(userId).FirstOrDefault();
         }
     }
 }
