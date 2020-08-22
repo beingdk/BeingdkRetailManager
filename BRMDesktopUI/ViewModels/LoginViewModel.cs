@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BRMDesktopUI.EventModels;
 using BRMDesktopUI.Library.Api;
 using Caliburn.Micro;
 
@@ -14,9 +15,11 @@ namespace BRMDesktopUI.ViewModels
 		private string _password;
 		private IApiHelper _apiHelper;
 		private string _errorMessage;
-		public LoginViewModel(IApiHelper apiHelper)
+		private IEventAggregator _events;
+		public LoginViewModel(IApiHelper apiHelper, IEventAggregator events)
 		{
 			_apiHelper = apiHelper;
+			_events = events;
 		}
 
 		public string UserName 
@@ -82,7 +85,11 @@ namespace BRMDesktopUI.ViewModels
 			{
 				ErrorMessage = "";
 				var result = await _apiHelper.Authenticate(UserName, Password);
+
+				//capture more infor about the user.
 				await _apiHelper.GetLoggedInUserInfo(result.Access_Token);
+
+				_events.PublishOnUIThread(new LogOnEvent());
 			}
 			catch(Exception ex)
 			{
