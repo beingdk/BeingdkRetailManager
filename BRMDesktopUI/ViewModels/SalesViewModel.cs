@@ -4,6 +4,7 @@ using Caliburn.Micro;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -40,8 +41,20 @@ namespace BRMDesktopUI.ViewModels
 			}
 		}
 
-		private BindingList<ProductModel> _cart;
-		public BindingList<ProductModel> Cart
+		private ProductModel _selectedProduct;
+		public ProductModel SelectedProduct
+		{
+			get { return _selectedProduct; }
+			set
+			{
+				_selectedProduct = value;
+				NotifyOfPropertyChange(() => SelectedProduct);
+				NotifyOfPropertyChange(() => CanAddToCart);
+			}
+		}
+
+		private BindingList<CartItemModel> _cart = new BindingList<CartItemModel>();
+		public BindingList<CartItemModel> Cart
 		{
 			get { return _cart; }
 			set
@@ -51,7 +64,7 @@ namespace BRMDesktopUI.ViewModels
 			}
 		}
 
-		private int _itemQuantity;
+		private int _itemQuantity = 1;
 		public int ItemQuantity
 		{
 			get { return _itemQuantity; }
@@ -59,6 +72,7 @@ namespace BRMDesktopUI.ViewModels
 			{
 				_itemQuantity = value;
 				NotifyOfPropertyChange(() => ItemQuantity);
+				NotifyOfPropertyChange(() => CanAddToCart);
 			}
 		}
 
@@ -66,8 +80,13 @@ namespace BRMDesktopUI.ViewModels
 		{
 			get
 			{
-				//TODO
-				return "Rs 0.00";
+				decimal subTotal = 0;
+
+				foreach (var item in Cart)
+				{
+					subTotal += item.Product.RetailPrice * item.QuantityInCart;
+ 				}
+				return subTotal.ToString("C", new CultureInfo("hi-IN"));
 			}
 		}
 
@@ -96,12 +115,36 @@ namespace BRMDesktopUI.ViewModels
 				bool output = false;
 				//Make sure there are item quantities
 				//Make sure an item is selected
+				if (ItemQuantity >= 1 && SelectedProduct?.QuantityInStock >= ItemQuantity)
+				{
+					output = true;
+				}
 				return output;
 			}
 		}
 
 		public void AddToCart()
 		{
+			CartItemModel existingItem = Cart.FirstOrDefault(x => x.Product == SelectedProduct);
+			if (existingItem != null)
+			{
+				existingItem.QuantityInCart += ItemQuantity;
+				Cart.Remove(existingItem);
+				Cart.Add(existingItem);
+			}
+			else
+			{
+				CartItemModel item = new CartItemModel
+				{
+					Product = SelectedProduct,
+					QuantityInCart = ItemQuantity
+				};
+				Cart.Add(item);
+			}
+			
+			SelectedProduct.QuantityInStock -= ItemQuantity;
+			ItemQuantity = 1;
+			NotifyOfPropertyChange(() => SubTotal);
 		}
 
 		public bool CanRemoveFromCart
@@ -116,6 +159,7 @@ namespace BRMDesktopUI.ViewModels
 
 		public void RemoveFromCart()
 		{
+			NotifyOfPropertyChange(() => SubTotal);
 		}
 
 		public bool CanCheckOut
