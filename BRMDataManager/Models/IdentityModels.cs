@@ -21,7 +21,7 @@ namespace BRMDataManager.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
+            : base("EFT_BRM_AuthData", throwIfV1Schema: false)
         {
         }
         
