@@ -11,8 +11,8 @@ namespace BRMDesktopUI.ViewModels
 {
 	public class LoginViewModel : Screen
 	{
-		private string _userName;
-		private string _password;
+		private string _userName = "yadavdk3536@gmail.com";
+		private string _password = "SmArt@62";
 		private IApiHelper _apiHelper;
 		private string _errorMessage;
 		private IEventAggregator _events;

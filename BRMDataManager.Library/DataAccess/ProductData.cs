@@ -15,6 +15,16 @@ namespace BRMDataManager.Library.DataAccess
 			SqlDataAccess data = new SqlDataAccess();
 
 			var output = data.LoadData<ProductModel, dynamic>("dbo.spProduct_GetAll", new { }, "BRMData");
+
+			return output;
+		}
+
+		public ProductModel GetProductById(int productId)
+		{
+			SqlDataAccess data = new SqlDataAccess();
+
+			var output = data.LoadData<ProductModel, dynamic>("dbo.spProduct_GetById", new { Id = productId }, "BRMData").FirstOrDefault();
+
 			return output;
 		}
 	}

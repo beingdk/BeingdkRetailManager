@@ -5,12 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BRMDesktopUI.Library.Helpers
+namespace BRMDataManager.Library
 {
-	// Move this to API layer
-	public class ConfigHelper : IConfigHelper
+	public static class ConfigHelper
 	{
-		public decimal GetTaxRate()
+		public static decimal GetTaxRate()
 		{
 			string rateText = ConfigurationManager.AppSettings["taxRate"];
 

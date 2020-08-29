@@ -15,11 +15,13 @@ namespace BRMDesktopUI.ViewModels
 	public class SalesViewModel : Screen
 	{
 		private IProductEndPoint _productEndPoint;
+		private ISaleEndPoint _saleEndPoint;
 		private IConfigHelper _configHelper;
 
-		public SalesViewModel(IProductEndPoint productEndPoint, IConfigHelper configHelper)
+		public SalesViewModel(IProductEndPoint productEndPoint, IConfigHelper configHelper, ISaleEndPoint saleEndPoint)
 		{
 			_productEndPoint = productEndPoint;
+			_saleEndPoint = saleEndPoint;
 			_configHelper = configHelper;
 		}
 
@@ -177,6 +179,7 @@ namespace BRMDesktopUI.ViewModels
 			NotifyOfPropertyChange(() => SubTotal);
 			NotifyOfPropertyChange(() => Tax);
 			NotifyOfPropertyChange(() => Total);
+			NotifyOfPropertyChange(() => CanCheckOut);
 		}
 
 		public bool CanRemoveFromCart
@@ -194,6 +197,7 @@ namespace BRMDesktopUI.ViewModels
 			NotifyOfPropertyChange(() => SubTotal);
 			NotifyOfPropertyChange(() => Tax);
 			NotifyOfPropertyChange(() => Total);
+			NotifyOfPropertyChange(() => CanCheckOut);
 		}
 
 		public bool CanCheckOut
@@ -202,12 +206,30 @@ namespace BRMDesktopUI.ViewModels
 			{
 				bool output = false;
 				//Make sure there is something in the cart
+				if (Cart.Count > 0)
+				{
+					output = true;
+				}
+
 				return output;
 			}
 		}
 
-		public void CheckOut()
+		public async Task CheckOut()
 		{
+			//Create a SaleModel and post it to the API
+			SaleModel sale = new SaleModel();
+
+			foreach (var item in Cart)
+			{
+				sale.SaleDeatils.Add(new SaleDetailModel
+				{
+					ProductId = item.Product.Id,
+					Quantity = item.QuantityInCart
+				});
+			}
+
+			await _saleEndPoint.PostSale(sale);
 		}
 	}
 }
