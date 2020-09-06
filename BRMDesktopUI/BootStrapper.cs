@@ -1,4 +1,5 @@
-﻿using BRMDesktopUI.Helpers;
+﻿using AutoMapper;
+using BRMDesktopUI.Helpers;
 using BRMDesktopUI.Library.Api;
 using BRMDesktopUI.Library.Helpers;
 using BRMDesktopUI.Library.Models;
@@ -11,6 +12,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using AutoMapper;
+using BRMDesktopUI.Models;
 
 namespace BRMDesktopUI
 {
@@ -22,8 +25,23 @@ namespace BRMDesktopUI
 			Initialize();
 		}
 
+		private IMapper ConfigureAutoMapper()
+		{
+			var config = new MapperConfiguration(cfg =>
+			{
+				cfg.CreateMap<ProductModel, ProductDisplayModel>();
+				cfg.CreateMap<CartItemModel, CartItemDisplayModel>();
+			});
+
+			var output = config.CreateMapper();
+
+			return output;
+		}
+
 		protected override void Configure()
 		{
+			_container.Instance(ConfigureAutoMapper());
+
 			_container.Instance(_container)
 				.PerRequest<IProductEndPoint, ProductEndPoint>()
 				.PerRequest<ISaleEndPoint, SaleEndPoint>();
